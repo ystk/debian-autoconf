@@ -843,7 +843,7 @@ m4_defun_init([AS_ERROR],
 [m4_append_uniq([_AS_CLEANUP],
   [m4_divert_text([M4SH-INIT-FN], [_AS_ERROR_PREPARE[]])])],
 [as_fn_error m4_default([$2], [$?]) "_AS_QUOTE([$1])"m4_ifval(AS_MESSAGE_LOG_FD,
-  [ "$LINENO" AS_MESSAGE_LOG_FD])])
+  [ "$LINENO" AS_MESSAGE_LOG_FD ])])
 
 
 # AS_LINENO_PUSH([LINENO])
