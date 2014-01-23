@@ -6,8 +6,7 @@ eval 'case $# in 0) exec @PERL@ -S "$0";; *) exec @PERL@ -S "$0" "$@";; esac'
     if 0;
 
 # autom4te - Wrapper around M4 libraries.
-# Copyright (C) 2001, 2002, 2003, 2005, 2006, 2007, 2008, 2009, 2010
-# Free Software Foundation, Inc.
+# Copyright (C) 2001-2003, 2005-2012 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -545,21 +544,13 @@ sub handle_output ($$)
   # stdout is to be handled by hand :(.  Don't use fdopen as it means
   # we will close STDOUT, which we already do in END.
   my $out = new Autom4te::XFile;
-  my $atomic_replace;
-  if ($output eq '-' || (-e $output && ! -f $output))
+  if ($output eq '-')
     {
       $out->open (">$output");
-      $atomic_replace = 0;
     }
   else
     {
-      $out->open("$output.tmp", O_CREAT | O_WRONLY | O_TRUNC, oct ($mode));
-      if ($out) {
-        $atomic_replace = 1;
-      } else {
-        $out->open($output, O_CREAT | O_WRONLY | O_TRUNC, oct ($mode));
-        $atomic_replace = 0;
-      }
+      $out->open($output, O_CREAT | O_WRONLY | O_TRUNC, oct ($mode));
     }
   fatal "cannot create $output: $!"
     unless $out;
@@ -597,11 +588,6 @@ sub handle_output ($$)
     }
 
   $out->close();
-
-  if ($atomic_replace && !rename("$output.tmp", "$output")) {
-    move ("${output}.tmp", "$output")
-      or fatal "cannot rename ${output}.tmp as $output: $!";
-  }
 
   # If no forbidden words, we're done.
   return
@@ -852,7 +838,7 @@ EOF
 
   # This is dubious: should we really transform the quadrigraphs in
   # traces?  It might break balanced [ ] etc. in the output.  The
-  # consensus seeems to be that traces are more useful this way.
+  # consensus seems to be that traces are more useful this way.
   while ($_ = $in->getline)
     {
       # It makes no sense to try to transform __oline__.
@@ -1001,8 +987,7 @@ $icache_file->lock (LOCK_EX)
 # If autom4te is younger, then some structures such as C4che might
 # have changed, which would corrupt its processing.
 Autom4te::C4che->load ($icache_file)
-  if -f $icache && mtime ($icache) > mtime ($0)
-                && Autom4te::C4che->good_version ($icache_file);
+  if -f $icache && mtime ($icache) > mtime ($0);
 
 # Add the new trace requests.
 my $req = Autom4te::C4che->request ('input' => \@ARGV,
@@ -1035,12 +1020,15 @@ for (split (/\n*$separator\n*/o, contents ("$tmp/warnings")))
   # | input.as:2: bar is expanded from...
   # | input.as:3: foo is expanded from...
   # | input.as:5: the top level
+  # In particular, m4_warn guarantees that either $stackdump is empty, or
+  # it consists of lines where only the last line ends in "top level".
   my ($cat, $loc, $msg, $stacktrace) = split ('::', $_, 4);
-  msg $cat, $loc, "warning: $msg";
+  msg $cat, $loc, "warning: $msg",
+    partial => ($stacktrace =~ /top level$/) + 0;
   for (split /\n/, $stacktrace)
     {
       my ($loc, $trace) = split (': ', $_, 2);
-      msg $cat, $loc, $trace;
+      msg $cat, $loc, $trace, partial => ($trace !~ /top level$/) + 0;
     }
 }
 

@@ -1,66 +1,24 @@
 #!/usr/bin/make -f
-# Model by Ian Jackson.
-# Debhelper model by Joey Hess.
-# Autoconf details by Ben Pfaff.
-# Released under the GNU GPL.
+%:
+	dh $@
 
-SHELL = /bin/bash
-
-configure: configure-stamp
-configure-stamp:
-	dh_testdir
-	perl -pi~ -e "s/^my \\\$$VERSION.*/my \\\$$VERSION = '`date`';/;" \
-		lib/Autom4te/C4che.pm
-	touch configure `find . -name Makefile.in`
-	AWK=awk EMACS=no ./configure --prefix=/usr --with-lispdir=
-	touch configure-stamp
-
-build: configure-stamp build-stamp
-build-stamp:
-	dh_testdir
-	make
-	touch build-stamp
-
-clean:
-	dh_testdir
-	dh_testroot
-	rm -f build-stamp configure-stamp
+override_dh_auto_clean:
 	[ ! -f Makefile ] || $(MAKE) distclean
-	rm -f *.m4f
-	rm -f doc/*.info
-	dh_clean
 
-install: build
-	dh_testdir
-	dh_testroot
-	dh_prep
+override_dh_auto_configure:
+	# Ensure nothing tries to re-bootstrap Autoconf with itself.
+	touch configure `find . -name Makefile.in`
+	dh_auto_configure -- EMACS=no HELP2MAN="`pwd`/build-aux/missing --run help2man" --with-lispdir=
 
-binary-arch:
-	# Nothing to do
+override_dh_auto_build:
+	dh_auto_build
+	$(MAKE) html info pdf ps
 
-binary-indep: build install
-	dh_testdir
-	dh_testroot
+override_dh_auto_test:
 
-	$(MAKE) CFLAGS=-O2 LDFLAGS=-s DESTDIR="`pwd`/debian/autoconf" install
-	rm -rf debian/autoconf/usr/{man,share/man,info,share/info}
+override_dh_auto_install:
+	$(MAKE) DESTDIR=$(CURDIR)/debian/tmp \
+	    install install-html install-info install-pdf install-ps
+	perl -pi -e 's/^my \$$VERSION.*/my \$$VERSION = "'"`date`"'";/;' \
+	    debian/tmp/usr/share/autoconf/Autom4te/C4che.pm 
 
-	install -d debian/autoconf/usr/share/emacs/site-lisp/autoconf
-	install -m 644 lib/emacs/autotest-mode.el debian/autoconf/usr/share/emacs/site-lisp/autoconf
-	install -d debian/autoconf/etc/emacs/site-start.d
-	install -m 644 debian/autoconf.emacsen-startup debian/autoconf/etc/emacs/site-start.d/50autoconf.el
-
-	dh_installdocs NEWS debian/NEWS.Debian README
-	dh_installman debian/man/*.1
-	dh_installchangelogs
-	dh_link
-	dh_compress
-	dh_fixperms
-	dh_installdeb
-	dh_shlibdeps
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
-
-binary: binary-indep
-.PHONY: build clean binary-arch binary-indep binary install
