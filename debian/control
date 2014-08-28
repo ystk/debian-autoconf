@@ -5,16 +5,17 @@ Maintainer: Ben Pfaff <pfaffben@debian.org>
 Standards-Version: 3.9.3
 Build-Depends-Indep: texinfo (>= 4.6), m4 (>= 1.4.13),
  texlive-base, texlive-generic-recommended, texlive-latex-base,
- texlive-latex-recommended
+ texlive-latex-recommended, texlive-fonts-recommended, help2man
 Build-Depends: debhelper (>= 7.0.50~)
 Homepage: http://www.gnu.org/software/autoconf/
 
 Package: autoconf
 Architecture: all
+Multi-arch: foreign
 Depends: perl (>> 5.005), m4 (>= 1.4.13), debianutils (>= 1.8), ${misc:Depends}
 Recommends: automake | automaken
-Breaks: autoconf2.13 (<< 2.13-47), gettext (<< 0.10.39), pkg-config (<< 0.25-1.1)
-Suggests: autoconf2.13, autoconf-archive, gnu-standards, autoconf-doc, libtool, gettext
+Breaks: gettext (<< 0.10.39), pkg-config (<< 0.25-1.1)
+Suggests: autoconf-archive, gnu-standards, autoconf-doc, libtool, gettext
 Description: automatic configure script builder
  The standard for FSF source packages.  This is only useful if you
  write your own programs or if you extensively modify other people's 
@@ -24,8 +25,7 @@ Description: automatic configure script builder
  `autoconf-archive' package.
  .
  This version of autoconf is not compatible with scripts meant for
- Autoconf 2.13 or earlier.  If you need support for such scripts,
- you must also install the autoconf2.13 package.
+ Autoconf 2.13 or earlier.
 
 Package: autoconf-doc
 Section: doc
@@ -34,5 +34,4 @@ Depends: ${misc:Depends}, gnu-standards
 Description: automatic configure script builder documentation
  GNU Autoconf is a package for creating scripts to configure source code
  packages using templates and an M4 macro package.  This package contains
- the manual for GNU Autoconf.  It documents the current version; if you
- are using Autoconf 2.13 instead, install the autoconf2.13 package.
+ the manual for GNU Autoconf.

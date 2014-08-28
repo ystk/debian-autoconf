@@ -1,3 +1,63 @@
+autoconf (2.69-7) unstable; urgency=low
+
+  * debian/control: Remove references to autoconf2.13, which is going
+    away.  See also bug #752291.
+
+ -- Ben Pfaff <pfaffben@debian.org>  Sun, 29 Jun 2014 09:34:10 -0700
+
+autoconf (2.69-6) unstable; urgency=low
+
+  * lib/autoconf/specific.m4: Use ((off_t) 1 << 31) << 31 in place of
+    (off_t) 1 << 62 to avoid undefined behavior when off_t is 32-bit.
+    Closes: #742780.  Thanks to Mathieu Malaterre <malat@debian.org> for
+    reporting this bug.
+
+ -- Ben Pfaff <pfaffben@debian.org>  Thu, 27 Mar 2014 14:48:36 -0700
+
+autoconf (2.69-5) unstable; urgency=low
+
+  * debian/rules: Use upstream manpages instead of Debian-specific ones.
+    Closes: #680079.  Thanks to Vincent Lefevre <vincent@vinc17.net> for
+    reporting this bug.
+  * debian/control: Add help2man build dependency.
+  * debian/source/options: Ignore generated documentation.
+
+ -- Ben Pfaff <pfaffben@debian.org>  Sun, 23 Feb 2014 08:07:54 -0800
+
+autoconf (2.69-4) unstable; urgency=low
+
+  * debian/control: Add build dependency on texlive-fonts-recommended.
+    Closes: #738402.  Thanks to Norbert Preining <preining@logic.at> for
+    explaining intent here.
+
+ -- Ben Pfaff <pfaffben@debian.org>  Sun, 09 Feb 2014 16:35:54 -0800
+
+autoconf (2.69-3) unstable; urgency=low
+
+  * debian/control: Apply patch to allow bootstrapping autoconf without
+    the much heavier dependency chains introduced by texinfo and
+    especially texlive-*.  From Daniel Schepler <dschepler@gmail.com>.
+    Closes: #737936.
+
+ -- Ben Pfaff <pfaffben@debian.org>  Sun, 09 Feb 2014 10:42:44 -0800
+
+autoconf (2.69-2) unstable; urgency=low
+
+  * Add multiarch support.  Thanks to Nicolas Calderon for supplying the
+    (trivial) patch for this, and, more importantly, for explaining the
+    implications. Closes: #727527.
+    + debian/control: Add "Multi-arch: foreign" to autoconf binary package.
+
+ -- Ben Pfaff <pfaffben@debian.org>  Sun, 03 Nov 2013 19:22:12 -0800
+
+autoconf (2.69-1.1) unstable; urgency=low
+
+  * Non-maintainer upload with maintainer's permission.
+    + Backport a patch from upstream to fix build failures with
+      texinfo 5.1.  Closes: #711297.
+
+ -- Daniel Schepler <schepler@debian.org>  Sun, 11 Aug 2013 10:56:46 -0700
+
 autoconf (2.69-1) unstable; urgency=low
 
   * New upstream release.
