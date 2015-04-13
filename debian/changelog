@@ -1,3 +1,15 @@
+autoconf (2.69-8) unstable; urgency=low
+
+  * debian/patches/AM_PROG_LIBTOOL.patch: New patch from Andreas Barth to
+    recognize AM_PROG_LIBTOOL in addition to AC_PROG_LIBTOOL in
+    autoreconf.  Closes: #759739.
+  * debia/changelog: Add build dependency on cm-super to avoid error from
+    missing cm-super-t1.enc during PDF manual build.  Thanks to David
+    Suárez <david.sephirot@gmail.com> for reporting this bug.  Closes:
+    #750252.
+
+ -- Ben Pfaff <pfaffben@debian.org>  Sun, 31 Aug 2014 10:14:38 -0700
+
 autoconf (2.69-7) unstable; urgency=low
 
   * debian/control: Remove references to autoconf2.13, which is going

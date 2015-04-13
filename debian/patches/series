@@ -2,3 +2,4 @@ atomic.patch
 stricter-versioning.patch
 texinfo.patch
 avoid-undefined-behavior-for-32bit-off_t.patch
+AM_PROG_LIBTOOL.patch

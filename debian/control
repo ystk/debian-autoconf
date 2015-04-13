@@ -5,7 +5,7 @@ Maintainer: Ben Pfaff <pfaffben@debian.org>
 Standards-Version: 3.9.3
 Build-Depends-Indep: texinfo (>= 4.6), m4 (>= 1.4.13),
  texlive-base, texlive-generic-recommended, texlive-latex-base,
- texlive-latex-recommended, texlive-fonts-recommended, help2man
+ texlive-latex-recommended, texlive-fonts-recommended, help2man, cm-super
 Build-Depends: debhelper (>= 7.0.50~)
 Homepage: http://www.gnu.org/software/autoconf/
 
